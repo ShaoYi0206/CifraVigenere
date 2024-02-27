@@ -1,40 +1,36 @@
 def vigenere_encrypt(msg, key):
     msg_encrypt = ""
-    len_key = len(key)
+    key_index = 0
     
-    for i in range(len(msg)):
-        # Convertendo caracteres para valores numéricos de 0 a n-1
-        value_char = ord(msg[i])
-        value_key  = ord(key[i % len_key]) 
-
-        # Calculando o valor cifrado
-        value_encrypt = (value_char + value_key)
-
-        # Convertendo o valor cifrado de volta para o caracter correpondentewe
-        msg_encrypt += chr(value_encrypt)
-
+    for char in msg:
+        if 32 <= ord(char) <= 127: 
+            shift  = ord(key[key_index]) - 32
+            char_encrypt = chr(((ord(char) - 32 + shift) % 96) + 32)
+            
+            msg_encrypt += char_encrypt
+            
+            key_index = (key_index + 1) % len(key)            
+            
     return msg_encrypt
 
-def vigenere_decrypt(msg_cipher, key):
+def vigenere_decrypt(msg_encrypt, key):
     msg_decrypt = ""
-    len_key = len(key)
+    key_index = 0
 
-    for i in range(len(msg_cipher)):
-        # Convertendo caracteres cifrados para valores númericos de 0 a n-1
-        value_char = ord(msg_cipher[i]) 
-        value_key = ord(key[i % len_key])
+    for char in msg_encrypt:
+        if 32 <= ord(char) <= 127:
+            shift = ord(key[key_index]) - 32
+            char_decrypt = chr(((ord(char) - 32 - shift) % 96) + 32)
+            
+            msg_decrypt += char_decrypt
 
-        # Calculando o valor decifrado
-        value_decrypt = (value_char - value_key)
-
-        # Convertendo o valor decifrado de volta para o caractere correspondente
-        msg_decrypt += chr(value_decrypt)
-
+            key_index = (key_index + 1) % len(key)
+            
     return msg_decrypt
 
 
 msg = input(str("Digite uma mensagem: "))
-key = "CHAVE"
+key = "KEY"
 
 msg_encrypt = vigenere_encrypt(msg, key)
 print("Mensagem Cifrada: ", msg_encrypt)
